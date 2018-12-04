@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<Card>
+		<h2>任务</h2>
+		<Card v-show="false">
 			<div class="search-con search-con-top">
 				<Input clearable placeholder="订单编号" class="search-input" v-model="search.orderId" @on-enter="handleSearch" />
 				<Select v-model="search.orderStatus" clearable placeholder="请选择订单状态" @on-enter="handleSearch">
@@ -56,7 +57,6 @@
 					</FormItem>
 					</Col>
 				</Row>
-				<upload-excel v-if="editTitle=='新增'" ref="myExcel"  @excelDos="excelDo"></upload-excel>
 			</Form>
 			<div class="demo-drawer-footer">
 				<Button style="margin-right: 8px" @click="closeDrawer">取消</Button>
@@ -64,18 +64,16 @@
 			</div>
 		</Drawer>
 		<Drawer width="640" v-model="detailShow">
-			<sale-detail :detail-data="detailData"></sale-detail>
+			<task-detail :detail-data="detailData"></task-detail>
 		</Drawer>
 	</div>
 </template>
 <script>
 	import '_c/tables/index.less'
-	import SaleDetail from './saleDetail';
-	import UploadExcel from './uploadExcel';
+	import TaskDetail from './taskDetail';
 	export default {
 		components: {
-			SaleDetail,
-			UploadExcel
+			TaskDetail,
 		},
 		data() {
 			return {
@@ -290,7 +288,6 @@
 					
 				//虚拟数据	
 				this.editData.orderId = '0000014';
-				this.editData.submitDate = this.M_getTodayFormat();
 				setTimeout(()=> {
 					this.$refs.myExcel.handleRemove();    //上传文件清空，  this.$refs.myExcel调用子组件方法  ref="myExcel"
 				},0)

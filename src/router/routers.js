@@ -64,18 +64,18 @@ export default [{
       },
       component: () => import('@/view/order/sale.vue')
     },{
-        path: 'Metering',
+        path: 'metering',
         name: '计调',
         meta: {
           icon: 'ios-infinite',
           title: '计调'
         },
-        component: () => import('@/view/components/drag-list/drag-list.vue')
+        component: () => import('@/view/order/metering.vue')
       }
     ]
   },
   {
-    path: '/order',
+    path: '/paint',
     name: '上画任务',
     component: Main,
     meta: {
@@ -83,29 +83,29 @@ export default [{
       title: '上画任务'
     },
     children: [{
-      path: 'sale',
+      path: 'task',
       name: '任务生成',
       meta: {
         icon: 'ios-hammer',
         title: '任务生成'
       },
-      component: () => import('@/view/order/sale.vue')
+      component: () => import('@/view/paint/task.vue')
     },{
-        path: 'Metering',
+        path: 'painting',
         name: '上画',
         meta: {
           icon: 'ios-infinite',
           title: '上画'
         },
-        component: () => import('@/view/components/drag-list/drag-list.vue')
+        component: () => import('@/view/paint/painting.vue')
       },{
-        path: 'Metering',
-        name: '计调',
+        path: 'metering',
+        name: '上画计调',
         meta: {
           icon: 'ios-infinite',
           title: '计调'
         },
-        component: () => import('@/view/components/drag-list/drag-list.vue')
+        component: () => import('@/view/paint/metering.vue')
       }
     ]
   },
@@ -119,7 +119,7 @@ export default [{
     component: () => import('@/view/login/login.vue')
   },
 	{
-    path: '/order',
+    path: '/info',
     name: '基础信息维护',
     component: Main,
     meta: {
@@ -127,21 +127,21 @@ export default [{
       title: '基础信息维护'
     },
     children: [{
-      path: 'sale',
+      path: 'community',
       name: '小区信息维护',
       meta: {
         icon: 'ios-hammer',
         title: '小区信息维护'
       },
-      component: () => import('@/view/order/sale.vue')
+      component: () => import('@/view/info/community.vue')
     },{
-        path: 'Metering',
+        path: 'point/:communityId?',
         name: '点位信息维护',
         meta: {
           icon: 'ios-infinite',
           title: '点位信息维护'
         },
-        component: () => import('@/view/components/drag-list/drag-list.vue')
+        component: () =>  import('@/view/info/point.vue')
       },{
         path: 'Metering',
         name: '客户信息维护',

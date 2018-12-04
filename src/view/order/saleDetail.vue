@@ -25,8 +25,6 @@
 
             </Row>
         </div>
-        <Divider />
-        
     </div>
 </template>
 <script>
@@ -46,7 +44,6 @@
             }
         },
         mounted () {
-          console.log(this.detailData)
         }
     }
 </script>

@@ -14,14 +14,14 @@
 				<Button @click="handleReset" class="search-btn" type="primary">
 					<Icon type="search" />重置
 				</Button>
-				<Button @click="handleSubmit" class="search-btn" type="primary">
-					<Icon type="search" />提交
+				<Button @click="passSubmit('list','1')" class="search-btn" type="primary">
+					<Icon type="search" />通过
 				</Button>
-				<Button @click="handleAdd" class="search-btn" type="primary">
-					<Icon type="search" />新增
+				<Button @click="passSubmit('list','0')" class="search-btn" type="primary">
+					<Icon type="search" />不通过
 				</Button>
 			</div>
-			<Table border :columns="columns" :data="tableList" @on-selection-change="selectChange"></Table>
+			<Table border ref="table" :columns="columns" :data="tableList" @on-selection-change="selectChange" @on-select="selectSinge"></Table>
 			<div style="margin: 10px;overflow: hidden">
 				<div style="float: right;">
 					<Page show-total :total="total" :page-size="pagesize" :current="pageNo" @on-change="pageChange"></Page>
@@ -56,26 +56,30 @@
 					</FormItem>
 					</Col>
 				</Row>
-				<upload-excel v-if="editTitle=='新增'" ref="myExcel"  @excelDos="excelDo"></upload-excel>
+				<Table border :columns="columnsDet" :data="tableListDet"></Table>
+				<div style="margin: 10px;overflow: hidden">
+					<div style="float: right;">
+						<Page show-total :total="totalDet" :page-size="pagesizeDet" :current="pageNoDet" @on-change="pageChangeDet"></Page>
+					</div>
+				</div>
 			</Form>
 			<div class="demo-drawer-footer">
 				<Button style="margin-right: 8px" @click="closeDrawer">取消</Button>
-				<Button type="primary" @click="editSubmit('editData')">提交</Button>
+				<Button type="primary" @click="passSubmit('det','1')">通过</Button>
+				<Button type="primary" @click="passSubmit('det','0')">不通过</Button>
 			</div>
 		</Drawer>
 		<Drawer width="640" v-model="detailShow">
-			<sale-detail :detail-data="detailData"></sale-detail>
+			<task-detail :detail-data="detailData"></task-detail>
 		</Drawer>
 	</div>
 </template>
 <script>
 	import '_c/tables/index.less'
-	import SaleDetail from './saleDetail';
-	import UploadExcel from './uploadExcel';
+	import TaskDetail from './taskDetail';
 	export default {
 		components: {
-			SaleDetail,
-			UploadExcel
+			TaskDetail,
 		},
 		data() {
 			return {
@@ -93,7 +97,12 @@
 				columns: [{
 						type: 'selection',
 						width: 60,
-						align: 'center'
+						align: 'center',
+					},
+					{
+						type: 'index',
+						width: 60,
+						align: 'center',
 					},
 					{
 						title: '订单编号',
@@ -141,37 +150,17 @@
 										type: 'primary',
 									},
 									style: {
-										display: params.row.orderStatus == '1' || params.row.orderStatus == '3' ? '' : 'none'
+										display: params.row.orderStatus == '2' ? '' : 'none'
 									},
 									on: {
 										click: () => {
 											this.editTitle = '编辑';
 											this.editShow = true;
-											this.editData = this.M_deepCopy(this.tableList[params.row._index]);
+											this.editData = this.M_deepCopy(this.tableList[params.row._index])
+											this.$refs.table.selectAll(false); //取消选中状态
 										}
 									}
-								}, '编辑'),
-								h('Button', {
-									props: {
-										size: 'small',
-										type: 'primary'
-									},
-									style: {
-										display: params.row.orderStatus == '1' || params.row.orderStatus == '3' ? '' : 'none'
-									},
-									on: {
-										click: () => {
-											this.$Modal.confirm({
-												title: '提示',
-												content: '<p>确定删除该订单</p>',
-												onOk: () => {
-													console.log(params.row.orderId)
-													this.tableList.splice(params.row._index, 1)
-												},
-											});
-										}
-									}
-								}, '删除'),
+								}, '编辑')
 							]);
 						}
 					}
@@ -215,7 +204,7 @@
 					submitDate: '20181127',
 					createdById: '10004',
 					createdBy: '张三',
-					orderStatus: '1'
+					orderStatus: '3'
 				}, {
 					orderId: '0000002',
 					submitDate: '20181227',
@@ -227,7 +216,7 @@
 					submitDate: '20181121',
 					createdById: '10004',
 					createdBy: '张三',
-					orderStatus: '1'
+					orderStatus: '2'
 				}, {
 					orderId: '0000009',
 					submitDate: '20181122',
@@ -247,7 +236,32 @@
 					createdBy: '王小',
 					orderStatus: '5'
 				}],
-				excelList: [],
+				selectedList: [],
+				pageNoDet: 1,
+				totalDet: 1,
+				pagesizeDet: 10,
+				columnsDet: [
+					{title: '订单编号',key: 'orderId'}, 
+					{title: '小区编号',key: 'communityId'}, 
+					{title: '小区名称',key: 'communityName'}, 
+					{title: '点位编号',key: 'ptId'}, 
+					{title: '售卖开始时间',key: 'timeZoneBegin'}, 
+					{title: '售卖结束时间',key: 'timeZoneEnd'}, 
+					{title: '客户编号',key: 'custormerId'}, 
+					{title: '客户名称',key: 'custormerName'}, 
+				],
+				tableListDet: [
+				 	{
+				 		orderId: '0000001',
+				 		communityId: 'SZ00001',
+				 		communityName: '星海名城',
+				 		ptId: 'DW000001',
+				 		timeZoneBegin: '2018-10-20',
+						timeZoneEnd: '2018-10-27',
+						custormerId: 'KN00001',
+						custormerName: '张大爷',
+				 	}
+				]	
 			}
 		},
 		methods: {
@@ -268,78 +282,72 @@
 					}
 					return bol
 				})
-				// this._ajaxSubmit('wcsQueryIndList.do', params, (res) => {
-				//     if(res.errorCode == '0000') {
-				//         this.tableList = res.indList
-				//         this.total = Number(res.total) || this.total
-				//     }
-				// })
 			},
 			//重置
 			handleReset() {
 				this.search = {};
 				this.handleSearch();
 			},
-			//提交
-			handleSubmit() {},
-			//新增
-			handleAdd() {
-				this.editTitle = '新增';
-				this.editShow = true;
-				this.editData = {};
-					
-				//虚拟数据	
-				this.editData.orderId = '0000014';
-				this.editData.submitDate = this.M_getTodayFormat();
-				setTimeout(()=> {
-					this.$refs.myExcel.handleRemove();    //上传文件清空，  this.$refs.myExcel调用子组件方法  ref="myExcel"
-				},0)
+			//通过1，不通过0
+			passSubmit(state, type) {
+				if (state == 'det') {
+					this.$refs.editData.validate((valid) => { //表单校验
+						if (valid) {
+							this.tableList.forEach((i, index) => {
+								if (this.editData.orderId == i.orderId) {
+									this.tableList[index].orderStatus = type == '1' ? '4' : '3';
+								}
+							})
+							this.editShow = false;
+						} else {
+							// this.$Message.error(mes + '失败!');
+						}
+					})
+					return false;
+				} else {
+					if (this.selectedList.length <= 0) {
+						this.$Message.success('请先选择一条数据!');
+						return false;
+					} else {
+						this.changeOrderState(type);
+					}
+				}
+			},
+			changeOrderState(type) {
+				let mes = type == '1' ? '通过' : '不通过';
+				let _list = [];
+				this.tableList.forEach((i, index) => {
+					this.selectedList.forEach((j, j_index) => {
+						if (i.orderId == j.orderId) {
+							_list.push({
+								_index: index,
+								_data: i
+							})
+						}
+					})
+				})
+				_list.forEach((item, index) => {
+					//只有已提交订单才可以进行审批操作
+					if (item._data.orderStatus == '2') {
+						//审批操作。。。
+						this.tableList[_list[index]._index].orderStatus = type == '1' ? '4' : '3'; //审批成功后修改状态
+						this.$Message.success(mes + '审批成功!');
+					} else {
+						this.$Message.success('该状态无法审批!');
+					}
+				})
 			},
 			//分页
 			pageChange(val) {
 				this.pageNo = val
 				this.handleSearch()
 			},
-			// editSearch() {
-			// 	let params = {
-			// 		'indNo': this.indNo,
-			// 	}
-			// 	this._ajaxSubmit('queryLinkInfo.do', params, (res) => {
-			// 		if(res.errorCode == '0000') {
-			// 			this.editData = res
-			// 			this.editData.indNo = this.indNo
-			// 		}
-			// 	})
-			// },
-			//新增、编辑: 提交
-			editSubmit(name) {
-				console.log(this.excelList)  //导入的表数据
-				this.$refs[name].validate((valid) => {   //表单校验
-					if (valid) {
-						if (this.editTitle == '新增') {
-							this.tableList.push(this.editData);
-							this.editData.orderStatus = "2";
-							this.$Message.success('提交成功!');
-						} else {
-							this.$Message.success('修改成功!');
-						}
-						this.editShow = false;
-					} else {
-						//this.$Message.error('表单验证失败!');
-					}
-				})
-				// this._ajaxSubmit('fillLinkInfo.do', this.editData, (res) => {
-				//     if(res.errorCode == '0000') {
-				//         // this.editData = res
-				//         this.$Message.success('客户资料修改完成！');
-				//         this.editShow = false
-				//         this.handleSearch()
-				//     }
-				// })
+			pageChangeDet(val) {
+				this.pageNoDet = val
 			},
 			//关闭弹框
 			closeDrawer() {
-				this.$refs.editData.resetFields();   //清空表单验证内容
+				this.$refs.editData.resetFields(); //清空表单验证内容
 				this.editShow = false;
 			},
 			//新增编辑时销售人员与编号联动
@@ -348,29 +356,25 @@
 					this.editData.createdById = "";
 					return;
 				}
-				//M_saleName假数据
+				//this.M_saleName 为人员列表假数据
 				this.M_saleName.find(val => {
 					if (val.label == event) {
 						this.editData.createdById = val.value;
 					}
 				})
 			},
-			/**
-			 * 子组件传值给父组件
-			 * @excelDos="excelDo"
-			 * @excelDos 子组件页面方法， excelDo父组件页面方法
-			 */
-			excelDo(list) {
-				this.excelList = list;
-			},
 			//table多选
 			selectChange(selection) {
-				console.log(selection)  //selection[]
+				this.selectedList = selection;
 			},
+			selectSinge(selection, row) {
+				//不是已提交不能操作
+			}
 		},
 		mounted() {
 			this.tableList = this.initList.concat();
 			this.total = this.tableList.length;
+			this.totalDet = this.tableListDet.length;
 		}
 	}
 </script>
