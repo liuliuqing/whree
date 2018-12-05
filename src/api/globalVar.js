@@ -9,23 +9,17 @@ export const globalVar = {
                 { value: "4", label: "已通过"},
                 { value: "5", label: "已分配"},
         	],
-        	M_carTypeArr: [
-        	    { value: "0", label: "无车" },
-        	    { value: "1", label: "有车有按揭" },
-        	    { value: "2", label: "有车无按揭" },
+        	M_salesStatus: [
+        	    { value: "1", label: "待售卖" },
+        	    { value: "2", label: "已售卖" },
         	],
-        	M_houseTypeArr: [
-        	    { value: "0", label: "无房产/租用"},
-        	    { value: "1", label: "本地有房产/有按揭"},
-        	    { value: "2", label: "本地有房产/无按揭"},
-        	    { value: "3", label: "外地有房产/有按揭"},
-        	    { value: "4", label: "外地有房产/无按揭"},
+        	M_adUploadStatus: [
+        	    { value: "1", label: "已上画"},
+        	    { value: "2", label: "未上画"},
         	],
-        	M_relationTypeArr: [
-                { value: "0", label: "配偶" },
-                { value: "1", label: "亲属" },
-                { value: "2", label: "同事" },
-                { value: "3", label: "朋友" },
+        	M_dataState: [
+                { value: "1", label: "有效" },
+                { value: "2", label: "无效" },
             ],
             M_payStatusArr: [
                 { value: "0", label: "成功" },
@@ -50,6 +44,6 @@ export const globalVar = {
         }
     },
     methods: {
-         
+
     }
 };

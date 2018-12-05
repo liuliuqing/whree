@@ -110,14 +110,24 @@ export default [{
     ]
   },
 {
-    path: '/login',
-    name: '验收材料导出',
-    meta: {
-      title: '验收材料导出',
-      hideInMenu: true
-    },
-    component: () => import('@/view/login/login.vue')
-  },
+        path: '/export',
+        name: '验收材料',
+        component: Main,
+        meta: {
+          hideInBread: true
+        },
+        children: [
+          {
+            path: 'export',
+            name: '验收材料导出',
+            meta: {
+              icon: 'ios-infinite',
+              title: '验收材料导出'
+            },
+            component: () => import('@/view/export/export.vue')
+          }
+        ]
+      },
 	{
     path: '/info',
     name: '基础信息维护',
@@ -143,13 +153,21 @@ export default [{
         },
         component: () =>  import('@/view/info/point.vue')
       },{
-        path: 'Metering',
+        path: 'point/sale',
+        name: '点位售卖信息维护',
+        meta: {
+          icon: 'ios-infinite',
+          title: '点位售卖信息维护'
+        },
+        component: () =>  import('@/view/info/point-sale.vue')
+      },{
+        path: 'client',
         name: '客户信息维护',
         meta: {
           icon: 'ios-infinite',
           title: '客户信息维护'
         },
-        component: () => import('@/view/components/drag-list/drag-list.vue')
+        component: () => import('@/view/info/client.vue')
       },{
         path: 'Metering',
         name: '员工信息维护',

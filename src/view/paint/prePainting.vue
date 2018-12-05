@@ -16,6 +16,9 @@
 					<Button @click="preHandleReset" class="search-btn" type="primary">
 						<Icon type="search" />重置
 					</Button>
+					<Button @click="preHandleBack" class="search-btn" type="primary">
+                        <Icon type="search" />返回
+                    </Button>
         		</Row>
         	</div>
         	<Table border ref="preTable" :columns="preColumns" :data="preDetailData"></Table>
@@ -50,13 +53,13 @@
 				prePagesize: 10,
 				preColumns: [
 					{type: 'index',width: 60,align: 'center'},
-					{title: '小区编号',key: 'communityId'}, 
-					{title: '小区名称',key: 'communityName'}, 
-					{title: '点位编号',key: 'ptId'}, 
-					{title: '点位名称',key: 'ptName'}, 
-					{title: '售卖开始日期',key: 'timeZoneBegin'}, 
-					{title: '售卖结束日期',key: 'timeZoneEnd'}, 
-					{title: '客户编号',key: 'custormerId'}, 
+					{title: '小区编号',key: 'communityId'},
+					{title: '小区名称',key: 'communityName'},
+					{title: '点位编号',key: 'ptId'},
+					{title: '点位名称',key: 'ptName'},
+					{title: '售卖开始日期',key: 'timeZoneBegin'},
+					{title: '售卖结束日期',key: 'timeZoneEnd'},
+					{title: '客户编号',key: 'custormerId'},
 					{title: '客户名称',key: 'custormerName'},
 				],
             }
@@ -69,8 +72,11 @@
 				this.presearch = {};
 			},
 			prePageChange() {
-				
+
 			},
+			preHandleBack() {
+                this.$emit('back');
+            },
 			getPreSearchData(val) {
 				this.presearch.taskId = val.taskId;
 				this.presearch.adUploadName = val.adUploadName;
@@ -79,7 +85,7 @@
 			}
 		},
         mounted () {
-			
+
         }
     }
 </script>
