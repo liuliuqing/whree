@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<Card>
-			<div class="search-con search-con-top">                
+			<div class="search-con search-con-top">
 				<Input clearable placeholder="点位编号" class="search-input" v-model="search.pointId" @on-enter="handleSearch" />
-				<Input clearable placeholder="小区名称" class="search-input" v-model="search.pointName" @on-enter="handleSearch" />		
+				<Input clearable placeholder="小区名称" class="search-input" v-model="search.communityName" @on-enter="handleSearch" />
 
 				<Button @click="handleSearch" class="search-btn" type="primary">
 					<Icon type="search" />查询
@@ -69,7 +69,7 @@
 								<Option v-for="item in provinceArr" :value="item.label" :key="item.value">{{ item.label }}</Option>
 							</Select>
 						</Form-item >
-						
+
                     </Col>
                     <Col span="12">
 					<Form-item  prop="City" >
@@ -86,7 +86,7 @@
 							</Select>
 						</Form-item >
                     </Col>
-				
+
                     <Col span="12">
 						<Form-item  prop="communityName" >
 							<Select v-model="editData.communityName"  filterable  clearable placeholder="请选择小区名称">
@@ -106,9 +106,9 @@
 <script>
 	import '_c/tables/index.less'
 	export default {
-		
-		data() {					
-			    		
+
+		data() {
+
 			return {
 				 ruleValidate: {
                     pointId: [
@@ -244,7 +244,7 @@
 									},
 									on: {
 										click: () => {
-											
+
 										}
 									}
 								}, '启用'),
@@ -288,7 +288,7 @@
                     City: '朝阳',
                     District: '丰台',
 					Status: '1',
-                    Painter: '柳青',               
+                    Painter: '柳青',
                 }],
                 initProvinceList: [{
                     value: 'guangdong',
@@ -321,7 +321,7 @@
                 {
                     value: '0000001',
                     label:'天福小区',
-                },],  
+                },],
                 initPainterList: [{
                     value: 'liuqing',
                     label:'柳青',
@@ -329,19 +329,22 @@
                 {
                     value: 'liuliuqing',
                     label:'柳柳青',
-                },]                                
+                },]
 			}
 		},
 		methods: {
-			handleSearch(id) {
+			handleSearch() {
+				//清除小区名称查询条件
+				if(this.search.communityName==''){
+					this.search.communityId = '';
+				}
+
+
 				let params = {
 					'pageSize': this.pageSize,
 					'pageNo': this.pageNo - 1
 				}
 				params = Object.assign({}, params, this.search)
-				if(this.$route.params.communityId){
-					this.search.communityId=this.$route.params.communityId;			
-					}
 				this.tableList = this.initList.concat();
 				this.tableList = this.tableList.filter(v => {
                     let bol = true
@@ -368,7 +371,7 @@
 				this.handleSearch()
             },
             //编辑页面提交    分修改与新增
-			editSubmit(name) {				
+			editSubmit(name) {
 				 this.$refs[name].validate((valid) => {
                     if (valid) {
 						if(this.editTitle == '新增') {
@@ -393,24 +396,23 @@
             //进入编辑页面
             edit(params){
                 this.editTitle= '编辑';
-                this.editShow = true;	             									
+                this.editShow = true;
                 this.editData =this.tableList[params.row._index];
                 this.params=params;
             },
             //修改数据
-            editMoify(){              
-                this.editShow = false;	             									               
-             
+            editMoify(){
+                this.editShow = false;
+
             },
             //添加
             editAdd(){
-                this.editShow = false;	             									
+                this.editShow = false;
                 this.tableList.push(this.editData);
 			}
 		},
 		mounted() {
-			this.tableList = this.initList.concat();
-            this.total = this.initList.length;
+
             //省份列表
             this.provinceArr=this.initProvinceList.concat();
             //城市列表
@@ -420,6 +422,18 @@
             //上画人员列表
 			this.painterArr=this.initPainterList.concat();
 			this.communityArr=this.initCommunityList.concat();
+
+			//根据路由返回参数初始化
+			if(this.$route.params.communityId){
+				this.search.communityId = this.$route.params.communityId;
+				this.search.communityName = this.$route.params.communityName;
+				this.handleSearch();
+
+			}else{
+				this.tableList = this.initList.concat();
+            	this.total = this.initList.length;
+			}
+
 		}
 	}
 </script>

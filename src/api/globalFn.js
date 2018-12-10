@@ -37,8 +37,8 @@ export const globalFn = {
 					strDate = ymdArr.join('-')
 					if (t) {
 						let objTime = {
-							"h+": date.getHours() >= 10 ? date.getHours() : '0' + date.getHours(), //小时 
-							"m+": date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes(), //分 
+							"h+": date.getHours() >= 10 ? date.getHours() : '0' + date.getHours(), //小时
+							"m+": date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes(), //分
 							"s+": date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()
 						}
 						for (let k in objTime) {
@@ -69,10 +69,31 @@ export const globalFn = {
 			currentdate = year + type + month + type + strDate;
 			return currentdate;
 		},
-		M_deepCopy(templateData) {  
-            let obj={};  
-            obj=JSON.parse(JSON.stringify(templateData)); //this.templateData是父组件传递的对象  
-            return obj  
-        }  
+		M_deepCopy(templateData) {
+            let obj={};
+            obj=JSON.parse(JSON.stringify(templateData)); //this.templateData是父组件传递的对象
+            return obj
+       	},
+		 /**
+         * 用星号替换内容
+         * type = 'phone', 中间四位数替换
+         * type = 'idCard', 身份证
+         * type = 'all', 全部替换
+         */
+         M_replaceWithStar(code, type) {
+            let num = '';
+            switch (type) {
+                case 'phone':
+                    num = code.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+                    break;
+                case 'all':
+                    let len = code.length;
+                    num = code.replace(code, "*****");
+                    break;
+                default:
+                    break;
+            }
+            return num;
+        },
 	}
 };

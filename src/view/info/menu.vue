@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<Card>
+		<h2>菜单维护</h2>
+		<Card v-show="false">
 			<div class="search-con search-con-top">
 				<Input clearable placeholder="订单编号" class="search-input" v-model="search.orderId" @on-enter="handleSearch" />
 				<Select v-model="search.orderStatus" clearable placeholder="请选择订单状态" @on-enter="handleSearch">
@@ -56,27 +57,17 @@
 					</FormItem>
 					</Col>
 				</Row>
-				<upload-excel v-if="editTitle=='新增'" ref="myExcel"  @excelDos="excelDo"></upload-excel>
 			</Form>
 			<div class="demo-drawer-footer">
 				<Button style="margin-right: 8px" @click="closeDrawer">取消</Button>
 				<Button type="primary" @click="editSubmit('editData')">提交</Button>
 			</div>
 		</Drawer>
-		<Drawer width="640" v-model="detailShow">
-			<sale-detail :detail-data="detailData"></sale-detail>
-		</Drawer>
 	</div>
 </template>
 <script>
 	import '_c/tables/index.less'
-	import SaleDetail from './saleDetail';
-	import UploadExcel from './uploadExcel';
 	export default {
-		components: {
-			SaleDetail,
-			UploadExcel
-		},
 		data() {
 			return {
 				search: {
@@ -86,7 +77,7 @@
 					createdBy: '',
 					orderStatus: '',
 				},
-				editNoIndex: 0,
+				//indNo: '',
 				pageNo: 1,
 				total: 1,
 				pagesize: 10,
@@ -121,8 +112,6 @@
 						title: '操作',
 						align: 'center',
 						key: 'action',
-						width: 220,
-//						fixed: 'right',
 						render: (h, params) => {
 							return h('div', [
 								h('Button', {
@@ -133,7 +122,7 @@
 									on: {
 										click: () => {
 											this.detailShow = true
-											this.detailData = this.tableList[params.row._index];
+											this.detailData = this.tableList[params.row._index]
 										}
 									}
 								}, '查看'),
@@ -149,7 +138,6 @@
 										click: () => {
 											this.editTitle = '编辑';
 											this.editShow = true;
-											this.editNoIndex = params.row._index;
 											this.editData = this.M_deepCopy(this.tableList[params.row._index]);
 										}
 									}
@@ -251,7 +239,6 @@
 					orderStatus: '5'
 				}],
 				excelList: [],
-				selectedList: [],   //已选列表
 			}
 		},
 		methods: {
@@ -285,44 +272,7 @@
 				this.handleSearch();
 			},
 			//提交
-			handleSubmit() {
-				if (this.selectedList.length <= 0) {
-                    this.$Message.success('请先选择一条数据!');
-                    return false;
-                } else {
-                    this.$Modal.confirm({
-                        title: '提示',
-                        content: '<p>确定提交该订单么？</p>',
-                        onOk: () => {
-                            this.changeOrderState();
-                        }
-                    })
-                }
-			},
-			changeOrderState() {
-                let _list = [];
-                this.tableList.forEach((i, index) => {
-                    this.selectedList.forEach((j, j_index) => {
-                        if (i.orderId == j.orderId) {
-                            _list.push({
-                                _index: index,
-                                _data: i
-                            })
-                        }
-                    })
-                })
-                _list.forEach((item, index) => {
-                    //只有待提交，已退回订单才可以进行审批操作
-                    if (item._data.orderStatus == '1' || item._data.orderStatus == '3') {
-                        //审批操作。。。
-                        this.tableList[_list[index]._index].orderStatus = '2'; //审批成功后修改状态
-                        this.disabledList();
-                        this.$Message.success('提交成功!');
-                    } else {
-//                        this.$Message.success('该状态无法审批!');
-                    }
-                })
-            },
+			handleSubmit() {},
 			//新增
 			handleAdd() {
 				this.editTitle = '新增';
@@ -331,7 +281,6 @@
 
 				//虚拟数据
 				this.editData.orderId = '0000014';
-				this.editData.submitDate = this.M_getTodayFormat();
 				setTimeout(()=> {
 					this.$refs.myExcel.handleRemove();    //上传文件清空，  this.$refs.myExcel调用子组件方法  ref="myExcel"
 				},0)
@@ -362,7 +311,6 @@
 							this.editData.orderStatus = "2";
 							this.$Message.success('提交成功!');
 						} else {
-							this.$set(this.tableList,this.editNoIndex,this.editData);  //响应式更新列表
 							this.$Message.success('修改成功!');
 						}
 						this.editShow = false;
@@ -408,22 +356,10 @@
 			//table多选
 			selectChange(selection) {
 				console.log(selection)  //selection[]
-				this.selectedList = selection;
 			},
-			//"已提交"才可以进行操作,其余置灰选择框
-            disabledList() {
-                this.tableList.forEach((item, index)=>{
-                    if(item.orderStatus != '1' && item.orderStatus != '3'){
-                        item._disabled = true;
-                    }else{
-                        item._disabled = false;
-                    }
-                })
-            }
 		},
 		mounted() {
 			this.tableList = this.initList.concat();
-			this.disabledList();
 			this.total = this.tableList.length;
 		}
 	}

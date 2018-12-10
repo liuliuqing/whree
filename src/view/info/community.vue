@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<Card>
-			<div class="search-con search-con-top">                
+			<div class="search-con search-con-top">
 				<Input clearable placeholder="小区编号" class="search-input" v-model="search.communityId" @on-enter="handleSearch" />
 				<Input clearable placeholder="小区名称" class="search-input" v-model="search.communityName" @on-enter="handleSearch" />
 				<Input clearable placeholder="维护人员" class="search-input" v-model="search.maintenancePersonnel" @on-enter="handleSearch" />
@@ -65,7 +65,7 @@
 								<Option v-for="item in communityProvinceArr" :value="item.label" :key="item.value">{{ item.label }}</Option>
 							</Select>
 						</Form-item >
-						
+
                     </Col>
                     <Col span="12">
 					<Form-item  prop="communityCity" >
@@ -111,30 +111,30 @@
 <script>
 	import '_c/tables/index.less'
 	export default {
-		
-		data() {	
+
+		data() {
 
 			const validatemaintenancePersonne= (rule, value, callback) => {
                 if (!value) {
 					callback(new Error('请选择维护人员'));
-				
+
 					}
 					else
 					{
 						 callback();
 					}
 				};
-				
+
 			    const validatePainter= (rule, value, callback) => {
                 if (!value) {
 					callback(new Error('请选择上画人员'));
-					
-				} 
+
+				}
 					else
 					{
 						 callback();
 					}
-				};			
+				};
 			return {
 				 ruleValidate: {
                     communityId: [
@@ -198,7 +198,7 @@
 									on: {
 										click: () => {
 										 console.log(params);
-										 this.$router.push({name:'点位信息维护',params:{communityId:params.row.communityId}});
+										 this.$router.push({name:'点位信息维护',params:{communityId:params.row.communityId,communityName:params.row.communityName}});
 										}
 									}
 								}, params.row.communityId);
@@ -274,7 +274,7 @@
 								}, params.row.maintenancePersonnel),
 							]);
                         }
-                        
+
 					},{
                         title: '坐标',
                         width: '10%',
@@ -305,7 +305,7 @@
 									},
 									on: {
 										click: () => {
-											
+
 										}
 									}
 								}, '启用'),
@@ -363,7 +363,7 @@
 					advertisingPointsNumber: '2',
 					Status: '1',
 					communityCoordinate: '192.168.0.21',
-                    Painter: '柳青',                    
+                    Painter: '柳青',
                     maintenancePersonnel: '王五'
                 }],
                 initProvinceList: [{
@@ -405,7 +405,7 @@
                 {
                     value: 'liuliuqing',
                     label:'柳柳青',
-                },]                                
+                },]
 			}
 		},
 		methods: {
@@ -442,7 +442,7 @@
 				this.handleSearch()
             },
             //编辑页面提交    分修改与新增
-			editSubmit(name) {				
+			editSubmit(name) {
 				 this.$refs[name].validate((valid) => {
                     if (valid) {
 						if(this.editTitle == '新增') {
@@ -466,20 +466,20 @@
             //进入编辑页面
             edit(params){
                 this.editTitle= '编辑';
-                this.editShow = true;	             									
+                this.editShow = true;
                 this.editData =this.M_deepCopy( this.tableList[params.row._index])
                 this.params=params;
             },
             //修改数据
-            editMoify(){              
-                this.editShow = false;	             									               
-                 
+            editMoify(){
+                this.editShow = false;
+
             },
             //添加
             editAdd(){
 				this.editData.Status = '0';
 				this.editData.communityCoordinate = '192.168.0.1';
-				
+
 				this.tableList.push(this.editData);
 				this.editShow = false;
 			}

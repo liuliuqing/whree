@@ -48,56 +48,57 @@
 				columns: [
 					{
 						title: '点位编号',
-						width: '8%',
+						width: 150,
+						fixed: 'left',
 						key: 'ptId',
 						align: 'center',
 					}, {
 						title: '点位名称',
-						width: '10%',
+						width: 150,
 						key: 'ptName',
 					}, {
 						title: '点位地址',
-						width: '10%',
+						width: 250,
 						key: 'ptAddress',
 					}, {
                         title: '省份',
-                         width: '8%',
+                        width: 150,
 						key: 'communityProvince',
 					}, {
                         title: '城市',
-                          width: '8%',
+                        width: 150,
 						key: 'communityCity',
 					}, {
                         title: '区县',
-                          width:'8%',
+                        width: 150,
 						key: 'communityDistrict',
 					},{
                         title: '小区编号',
-                        width: '5%',
+                        width: 150,
 						key: 'communityId',
 					},{
                         title: '小区名称',
-                        width:'8%',
+                        width: 150,
 						key: 'communityName',
 					},
 					{
                         title: '售卖开始时间',
-                        width: '10%',
+                        width: 150,
 						key: 'timeZoneBegin',
 					},{
                         title: '售卖结束时间',
-                        width: '10%',
+                        width: 150,
 						key: 'timeZoneEnd',
 					},{
                         title: '售卖状态',
-                        width: '10%',
+                        width: 150,
 						key: 'salesStatus',
 						render: (h, params) => {
                             return h('span', params.row.salesStatus && this.M_salesStatus.find(val => val.value == params.row.salesStatus).label);
                         }
 					},{
                         title: '上画状态',
-                        width: '10%',
+                        width: 150,
 						key: 'adUploadStatus',
 						render: (h, params) => {
                             return h('span', params.row.adUploadStatus && this.M_adUploadStatus.find(val => val.value == params.row.adUploadStatus).label);
@@ -105,7 +106,8 @@
 					},{
                         title: '操作',
 						align: 'center',
-						width: '200px',
+						width: 200,
+						fixed: 'right',
 						key: 'action',
 						render: (h, params) => {
 							return h('div', [

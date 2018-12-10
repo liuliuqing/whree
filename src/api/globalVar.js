@@ -21,10 +21,12 @@ export const globalVar = {
                 { value: "1", label: "有效" },
                 { value: "2", label: "无效" },
             ],
-            M_payStatusArr: [
-                { value: "0", label: "成功" },
-                { value: "9", label: "失败" },
-			],
+            M_StaffType: [
+                { value: "1", label: "管理员" },
+                { value: "2", label: "销售" },
+                { value: "3", label: "计调" },
+                { value: "4", label: "上画" },
+            ],
 			M_StatusArr: [
                 { value: "0", label: "有效" },
                 { value: "1", label: "无效" },

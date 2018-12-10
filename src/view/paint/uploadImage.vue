@@ -24,7 +24,7 @@
                             :on-success="handleSuccess" :format="['jpg','jpeg','png']"
                             :max-size="2048" :on-format-error="handleFormatError"
                             :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload"
-                             multiple type="drag" action="http://99.12.136.153/CvmMobile/Interface/FilesUpload"
+                             multiple type="drag" action="//jsonplaceholder.typicode.com/posts/"
                              style="display: inline-block;width:158px;">
                             <div style="width: 158px;height:158px;line-height: 158px;">
                                 <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>               
@@ -121,6 +121,10 @@
                 //                    url: file.url,
                 //                    name: file.name
                 //                }
+
+				console.log(res,file)
+
+
                 file.url = this.logo;
                 file.name = 'logo';
                 this.$emit('uploadSuccess',this.uploadList);

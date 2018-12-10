@@ -169,37 +169,37 @@ export default [{
         },
         component: () => import('@/view/info/client.vue')
       },{
-        path: 'Metering',
-        name: '员工信息维护',
-        meta: {
-          icon: 'ios-infinite',
-          title: '员工信息维护'
-        },
-        component: () => import('@/view/components/drag-list/drag-list.vue')
-      },{
-        path: 'Metering',
-        name: '销售合同维护',
-        meta: {
-          icon: 'ios-infinite',
-          title: '销售合同维护'
-        },
-        component: () => import('@/view/components/drag-list/drag-list.vue')
-      },{
-        path: 'Metering',
+        path: 'employees',
+        name: '员工信息维护',
+        meta: {
+          icon: 'ios-infinite',
+          title: '员工信息维护'
+        },
+        component: () => import('@/view/info/employees.vue')
+      },{
+        path: 'contract',
+        name: '销售合同维护',
+        meta: {
+          icon: 'ios-infinite',
+          title: '销售合同维护'
+        },
+        component: () => import('@/view/info/contract.vue')
+      },{
+        path: 'menu',
         name: '菜单信息维护',
         meta: {
           icon: 'ios-infinite',
           title: '菜单信息维护'
         },
-        component: () => import('@/view/components/drag-list/drag-list.vue')
+        component: () => import('@/view/info/menu.vue')
       },{
-        path: 'Metering',
+        path: 'role',
         name: '角色信息维护',
         meta: {
           icon: 'ios-infinite',
           title: '角色信息维护'
         },
-        component: () => import('@/view/components/drag-list/drag-list.vue')
+        component: () => import('@/view/info/role.vue')
       }
     ]
   },
