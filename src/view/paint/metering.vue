@@ -10,16 +10,16 @@
                 </Select>-->
                 <Button @click="handleSearch" class="search-btn" type="primary">
                     <Icon type="search" />查询
-                </Button>
+				</Button>
                 <Button @click="handleReset" class="search-btn" type="primary">
                     <Icon type="search" />重置
-                </Button>
+				</Button>
                 <Button @click="passSubmit('1')" class="search-btn" type="primary">
                     <Icon type="search" />通过
-                </Button>
+				</Button>
                 <Button @click="passSubmit('0')" class="search-btn" type="primary">
                     <Icon type="search" />不通过
-                </Button>
+				</Button>
             </div>
             <Table border ref="table" :columns="columns" :data="tableList" @on-selection-change="selectChange"></Table>
             <div style="margin: 10px;overflow: hidden">

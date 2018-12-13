@@ -10,16 +10,16 @@
                 <Input clearable placeholder="销售人名称" class="search-input" v-model="search.createdBy" @on-enter="handleSearch" />
                 <Button @click="handleSearch" class="search-btn" type="primary">
                     <Icon type="search" />查询
-                </Button>
+				</Button>
                 <Button @click="handleReset" class="search-btn" type="primary">
                     <Icon type="search" />重置
-                </Button>
+				</Button>
                 <Button @click="passSubmit('list','1')" class="search-btn" type="primary">
                     <Icon type="search" />通过
-                </Button>
+				</Button>
                 <Button @click="passSubmit('list','0')" class="search-btn" type="primary">
                     <Icon type="search" />不通过
-                </Button>
+				</Button>
             </div>
             <Table border ref="table" :columns="columns" :data="tableList" @on-selection-change="selectChange" @on-select="selectSinge"></Table>
             <div style="margin: 10px;overflow: hidden">

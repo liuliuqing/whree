@@ -12,10 +12,10 @@
                 <DatePicker clearable type="date" placeholder="售卖结束时间" :editable=false v-model="search.timeZoneEnd" style="width: 200px"></DatePicker>
                 <Button @click="handleSearch" class="search-btn" type="primary">
                     <Icon type="search" />查询
-                </Button>
+				</Button>
                 <Button @click="handleReset" class="search-btn" type="primary">
                     <Icon type="search" />重置
-                </Button>
+				</Button>
             </div>
             <Table border ref="table" :columns="columns" :data="tableList"></Table>
             <div style="margin: 10px;overflow: hidden">
